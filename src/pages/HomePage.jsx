@@ -4,7 +4,11 @@ import { ListData } from "../asset/components/RanderList/ListData";
 
 export const HomePage = () => {
 
+  let [DataAwal, setDataAwal] = useState("")
+  
   let [InputData, setInputData] = useState("")
+
+  let [DataSearch, setDataSearch] = useState("") 
 
  const [Data, setData] = useState (
   [
@@ -26,7 +30,7 @@ export const HomePage = () => {
     {
       "id": 4,
       "task": "Sarapan sereal",
-      "complete": true
+      "complete": false
     }, 
     {
       "id": 5,
@@ -36,12 +40,12 @@ export const HomePage = () => {
     {
       "id": 6,
       "task": "Ngeprint tugas",
-      "complete": true
+      "complete": false
     }, 
     {
       "id": 7,
       "task": "Bayar tagihan bulanan",
-      "complete": true
+      "complete": false
     }, 
     {
       "id": 8,
@@ -51,7 +55,7 @@ export const HomePage = () => {
     {
       "id": 9,
       "task": "Les bahasa Inggris",
-      "complete": true
+      "complete": false
     }, 
     {
       "id": 10,
@@ -60,6 +64,8 @@ export const HomePage = () => {
     }
   ]
  )
+
+ DataAwal=Data
 
  function generateRandomId(min, max) {
   return  Math.floor(Math.random() * (max - min + 1)) + min;
@@ -78,6 +84,16 @@ export const HomePage = () => {
 
         setData(dataAwal)
     }
+
+  const handleDelete = (id) => {
+    
+    const updatedData = Data.filter((value) => value.id !== id);
+    setData(updatedData);
+  };
+
+  const handleFilter=(e)=>{
+    setData(Data.filter((value) => value.task.includes(DataSearch)))
+  }
  
 
   return (
@@ -91,9 +107,9 @@ export const HomePage = () => {
             <div className='m-4 w-[55%]  '> 
               
               <div className='flex w-[auto] h-[2.5rem] mb-5 bg-red-500 rounded-md'>
-                <div className='bg-cyan-400 w-[10%] h-[100%] rounded-l  justify-center items-center flex'>S</div><input placeholder=' cari task disini' className='w-[90%] h-[100%] rounded-r border' type="text" />
+                <div className='bg-cyan-400 w-[10%] h-[100%] rounded-l  justify-center items-center flex'>S</div><input onChange={(e)=>{setDataSearch(e.target.value)}} placeholder=' cari task disini' className='w-[90%] h-[100%] rounded-r border' type="text" />
               </div>
-              <button className='bg-red-500 h-[2.8rem] w-[100%] rounded'>Search</button>
+              <button onClick={()=>{handleFilter()}} className='bg-red-500 h-[2.8rem] w-[100%] rounded'>Search</button>
 
             </div>
             <div className='w-[45%] m-4'>
@@ -112,9 +128,12 @@ export const HomePage = () => {
           </div>
 
           <div className="flex flex-col mt-10 bg-white gap-4 rounded">
-            {Data.map((data, index) => (
-              <ListData key={index} data={data} />
+            {DataAwal.map((data, index) => (
+              <ListData key={index} data={data} setData={setData} deleteTask={handleDelete} />
+              
             ))}
+
+           
           </div>
           <div className='flex justify-between mt-8'>
             <button className='bg-red-500 h-[2.8rem] w-[48%] rounded'>Delete done task</button>
