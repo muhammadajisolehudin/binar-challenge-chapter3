@@ -2,10 +2,8 @@ import React, { useState } from "react";
 
 export const ListData = (props) => {
   const [check, setCheck] = useState(props.data.complete)
-  let [Data, setData] = useState(props.data)
   let [task, setTask]= useState(props.data.task) 
   let [edit, setEdit] = useState(true)
-  let [Delete, setDelete] =useState(props.deleteTask)
 
   const handleCheckboxChange = () => {
     setCheck(!check);
@@ -29,10 +27,10 @@ export const ListData = (props) => {
         </p>
         {console.log(check)}
       </div>
-      <div className="flex w-[12%] bg-green-500 justify-between">
+      <div className="flex w-[12%] justify-between">
         <input checked={check} onChange={handleCheckboxChange} type="checkbox" />
         <button onClick={()=>{setEdit(!edit)}}>edit</button>
-        <button onClick={() => props.deleteTask(props.data.id)}>hapus</button>
+        <button onClick={() => props.deleteTask(task)}>hapus</button>
       </div>
     </div>
   );

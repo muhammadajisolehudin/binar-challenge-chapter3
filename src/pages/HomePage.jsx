@@ -4,7 +4,13 @@ import { ListData } from "../asset/components/RanderList/ListData";
 
 export const HomePage = () => {
 
-  let [DataAwal, setDataAwal] = useState("")
+  
+  // let [DataAwal, setDataAwal] = useState([])
+
+
+const [showAll, setShowAll] = useState(true);
+const [showDone, setShowDone] = useState(false);
+const [showTodo, setShowTodo] = useState(false);
   
   let [InputData, setInputData] = useState("")
 
@@ -65,7 +71,9 @@ export const HomePage = () => {
   ]
  )
 
- DataAwal=Data
+
+ 
+
 
  function generateRandomId(min, max) {
   return  Math.floor(Math.random() * (max - min + 1)) + min;
@@ -77,7 +85,7 @@ export const HomePage = () => {
         let dataAwal=Data
 
         dataAwal.push({
-            // "id": generateRandomId(11, 100),
+            "id": generateRandomId(11, 100),
             "task": dataBaru,
             "complete": false
         })
@@ -85,10 +93,14 @@ export const HomePage = () => {
         setData(dataAwal)
     }
 
-  const handleDelete = (id) => {
+  const handleDelete = (task) => {
     
-    const updatedData = Data.filter((value) => value.id !== id);
+    const updatedData = Data.filter((value) => value.task !== task);
     setData(updatedData);
+  };
+
+  const handleTask = (complete) => {
+    setData(complete);
   };
 
   const handleFilter=(e)=>{
@@ -103,11 +115,11 @@ export const HomePage = () => {
         
         <h1 className=' mt-6 text-2xl font-bold justify-center flex'>TodoSearch</h1>
         <div className='m-3 mx-60'>
-          <div className='p-3 bg-green-300 flex border-red-500 border-2 rounded-md'> 
+          <div className='p-3 flex border-red-500 border-2 rounded-md'> 
             <div className='m-4 w-[55%]  '> 
               
               <div className='flex w-[auto] h-[2.5rem] mb-5 bg-red-500 rounded-md'>
-                <div className='bg-cyan-400 w-[10%] h-[100%] rounded-l  justify-center items-center flex'>S</div><input onChange={(e)=>{setDataSearch(e.target.value)}} placeholder=' cari task disini' className='w-[90%] h-[100%] rounded-r border' type="text" />
+                <div className='bg-red-500 w-[10%] h-[100%] rounded-l  justify-center items-center flex'>S</div><input onChange={(e)=>{setDataSearch(e.target.value)}} placeholder=' cari task disini' className='w-[90%] h-[100%] rounded-r border' type="text" />
               </div>
               <button onClick={()=>{handleFilter()}} className='bg-red-500 h-[2.8rem] w-[100%] rounded'>Search</button>
 
@@ -122,16 +134,30 @@ export const HomePage = () => {
 
           <h1 className=' text-2xl justify-center m-2 font-semibold flex'>TodoLIst</h1>
           <div className='flex justify-between'>
-            <button className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>All</button>
-            <button className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>Done</button>
-            <button className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>Todo</button>
+            <button onClick={() => {setShowAll(true);setShowDone(false);setShowTodo(false);}} className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>All</button>
+            <button onClick={() => {setShowAll(false);setShowDone(true);setShowTodo(false);}} className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>Done</button>
+            <button onClick={() => {setShowAll(false);setShowDone(false);setShowTodo(true);}} className='bg-red-500 h-[2.8rem] w-[16.6rem] rounded'>Todo</button>
           </div>
 
           <div className="flex flex-col mt-10 bg-white gap-4 rounded">
-            {DataAwal.map((data, index) => (
+            {/* {Data.map((data, index) => (
               <ListData key={index} data={data} setData={setData} deleteTask={handleDelete} />
               
-            ))}
+            ))} */}
+
+          {showAll
+            ? Data.map((data, index) => (
+                <ListData key={index} data={data} setData={setData} deleteTask={handleDelete} checkTask={handleTask}/>
+              ))
+          : showDone
+          ? Data.filter((data) => data.complete).map((data) => (
+              <ListData data={data} setData={setData} deleteTask={handleDelete} checkTask={handleTask} />
+            ))
+          : showTodo
+          ? Data.filter((data) => !data.complete).map((data) => (
+              <ListData data={data} setData={setData} deleteTask={handleDelete} checkTask={handleTask}/>
+            ))
+          : null}
 
            
           </div>
