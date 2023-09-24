@@ -106,6 +106,13 @@ const [showTodo, setShowTodo] = useState(false);
   const handleFilter=(e)=>{
     setData(Data.filter((value) => value.task.includes(DataSearch)))
   }
+  const handleDeleteAll = ()=>{
+    setData([]);
+  }
+  const handleDeleteDoneTask = () => {
+    const updatedData = Data.filter((value) => !value.complete);
+    setData(updatedData);
+  }
  
 
   return (
@@ -162,13 +169,12 @@ const [showTodo, setShowTodo] = useState(false);
            
           </div>
           <div className='flex justify-between mt-8'>
-            <button className='bg-red-500 h-[2.8rem] w-[48%] rounded'>Delete done task</button>
-            <button className='bg-red-500 h-[2.8rem] w-[48%] rounded'>Delete all task</button>
+            <button onClick={()=>{handleDeleteDoneTask()}} className='bg-red-500 h-[2.8rem] w-[48%] rounded'>Delete done task</button>
+            <button onClick={()=>{handleDeleteAll()}} className='bg-red-500 h-[2.8rem] w-[48%] rounded'>Delete all task</button>
           </div>
         </div>
 
-        
-        
+        <h1 className='flex justify-center text-3xl text-bold my-4'> masih banyak yang nyantol, masih bingung capt cara handle nyantolnya gimana??</h1>
     </div>
   )
 }
